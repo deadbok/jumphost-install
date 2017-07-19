@@ -1,0 +1,36 @@
+---
+- name: Include jump host configuration in ssh config.
+  lineinfile:
+    dest: "/home/{{ user }}/.ssh/config"
+    line: "Include {{ jumphost_dir }}/*"
+    group: "{{ user }}"
+    owner: "{{ user }}"
+    create: yes
+  become: yes
+  with_items: "{{ jumphosts[item].users }}"
+  loop_control:
+    loop_var: user
+
+- name: Ensure ssh jump host directory exists.
+  file:
+    path: "/home/{{ user }}/.ssh/{{ jumphost_dir }}"
+    recurse: True
+    state: directory
+    group: "{{ user }}"
+    owner: "{{ user }}"
+  become: yes
+  with_items: "{{ jumphosts[item].users }}"
+  loop_control:
+    loop_var: user
+
+- name: Create ssh jump host configuration.
+  template:
+    src: jumphost.j2
+    dest: "/home/{{ user }}/.ssh/{{ jumphost_dir }}/{{ item }}"
+    group: "{{ user }}"
+    owner: "{{ user }}"    
+  become: yes
+  with_items: "{{ jumphosts[item].users }}"
+  loop_control:
+    loop_var: user
+  when: jumphosts is defined

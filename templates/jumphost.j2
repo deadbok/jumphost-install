@@ -1,0 +1,4 @@
+Host {{ item }}
+  Hostname {{ hostvars[item].public_ip4 }}
+  Port {{ hostvars[item].jumphost.port }}
+ProxyJump {{ hostvars[item].jumphost.jhost_user }}@{{ hostvars[item].jumphost.jhost }}:{{ hostvars[item].jumphost.jhost_port }}

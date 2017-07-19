@@ -1,1 +1,4 @@
 ---
+- include: host.yml
+  with_items: "{{ jumphosts }}"
+  when: jumphosts is defined
