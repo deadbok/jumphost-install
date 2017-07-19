@@ -1,0 +1,6 @@
+{% for jhost, jumphost in jumphosts.items() %}
+Host hostvars[inventory_hostname]
+  Hostname 192.168.122.2
+  Port {{ jumphost['port'] }}
+  ProxyJump {{ jumphost['jhost_user']}}@{{ jhost }}:{{ jumphost['jhost_port'] }}
+{% endfor %}
